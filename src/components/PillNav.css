@@ -130,17 +130,34 @@
   z-index: 2;
   display: inline-block;
   line-height: 1;
+  color: var(--pill-text, var(--base, #000));
   will-change: transform;
+}
+
+.pill:hover .pill-label,
+.pill.is-active .pill-label {
+  color: var(--hover-text, #fff);
 }
 
 .pill .pill-label-hover {
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--hover-text, #fff);
+  color: var(--hover-text, #f8fafc);
   z-index: 3;
   display: inline-block;
+  opacity: 0;
   will-change: transform, opacity;
+}
+
+.pill:hover .pill-label-hover,
+.pill.is-active .pill-label-hover {
+  opacity: 1;
+}
+
+.pill:hover .pill-label,
+.pill.is-active .pill-label {
+  color: #f8fafc;
 }
 
 .pill.is-active::after {

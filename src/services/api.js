@@ -3,7 +3,12 @@ export const MSG={REGISTRATION_CLOSED:'Registration is closed.',DUPLICATE:'This 
 export async function isOpen(){const {data}=await supabase.from('settings').select('value').eq('key','registration_open').maybeSingle();return data?.value==='true';}
 export async function registerEventDay(p){
  const {data,error}=await supabase.rpc('register_event_day',{p});
- if(error){const m=error.message||'';throw new Error(m.includes('REGISTRATION_CLOSED')?MSG.REGISTRATION_CLOSED:error.code==='23505'?MSG.DUPLICATE:MSG.GENERIC);}
+ if(error){const m=error.message||'';
+  if(m.includes('REGISTRATION_CLOSED')) throw new Error(MSG.REGISTRATION_CLOSED);
+  if(error.code==='23505') throw new Error(MSG.DUPLICATE);
+  if(error.code==='23514' || m.toLowerCase().includes('member2') || m.toLowerCase().includes('check constraint')) throw new Error('Optional member details are invalid. Please leave the extra member field blank or remove it.');
+  throw new Error(MSG.GENERIC);
+ }
  return data;}
 const post=async(u,b)=>{let r;try{r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});}catch{throw new Error(MSG.NET);}
  const j=await r.json().catch(()=>({}));if(!r.ok){if(r.status===404&&u.startsWith('/api/'))throw new Error(MSG.LOCAL_API);throw new Error(MSG[j.error]||MSG.GENERIC);}return j;};

@@ -1,5 +1,5 @@
 import {createClient} from '@supabase/supabase-js';
-const F=['team_name','leader_name','leader_phone','leader_email','college','city','member2_name','member2_phone','member2_email','robot_name'];
+const F=['team_name','leader_name','leader_phone','leader_email','college','city','member2_name','robot_name'];
 export default async function handler(req,res){
  if(req.method!=='POST')return res.status(405).end();
  try{const b=req.body||{},p={};F.forEach(k=>p[k]=(typeof b[k]==='string'&&b[k].trim())||null);

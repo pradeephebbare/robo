@@ -8,7 +8,8 @@ create table public.registrations(
  leader_name text not null, leader_phone text not null check(leader_phone ~ '^[6-9][0-9]{9}$'),
  leader_email text not null check(leader_email ~* '^\S+@\S+\.\S+$'),
  college text not null, city text not null,
- member2_name text, member2_phone text check(member2_phone is null or member2_phone ~ '^[6-9][0-9]{9}$'),
+ member2_name text check(member2_name is null or length(trim(member2_name)) between 2 and 80),
+ member2_phone text check(member2_phone is null or member2_phone ~ '^[6-9][0-9]{9}$'),
  member2_email text check(member2_email is null or member2_email ~* '^\S+@\S+\.\S+$'),
  robot_name text not null,
  robot_type text not null default 'AUTONOMOUS_WIRELESS' check(robot_type='AUTONOMOUS_WIRELESS'),
@@ -19,7 +20,8 @@ create table public.registrations(
  registered_at timestamptz not null default now(),
  payment_received_at timestamptz, payment_received_by text,
  created_at timestamptz not null default now(), updated_at timestamptz not null default now(),
- check((member2_name is null)=(member2_phone is null) and (member2_phone is null)=(member2_email is null)));
+ check(member2_name is null or member2_name <> '')
+);
 create unique index on public.registrations(lower(team_name));
 create unique index on public.registrations(leader_phone);
 create index on public.registrations(registration_id);create index on public.registrations(team_name);
@@ -47,7 +49,7 @@ declare rid text;
 begin
  if coalesce((select value from settings where key='registration_open'),'false')<>'true' then raise exception 'REGISTRATION_CLOSED'; end if;
  insert into registrations(team_name,leader_name,leader_phone,leader_email,college,city,member2_name,member2_phone,member2_email,robot_name,payment_method,payment_status)
- values(trim(p->>'team_name'),p->>'leader_name',p->>'leader_phone',p->>'leader_email',p->>'college',p->>'city',p->>'member2_name',p->>'member2_phone',p->>'member2_email',p->>'robot_name','EVENT_DAY','PENDING')
+ values(trim(p->>'team_name'),p->>'leader_name',p->>'leader_phone',p->>'leader_email',p->>'college',p->>'city',nullif(trim(p->>'member2_name'),'') ,p->>'member2_phone',p->>'member2_email',p->>'robot_name','EVENT_DAY','PENDING')
  returning registration_id into rid;
  return rid;
 end$$;

@@ -57,17 +57,27 @@ export default function App(){
     ease="power3.easeOut"
     baseColor="#0b1220"
     pillColor="#dbeafe"
-    hoveredPillTextColor="#0b1220"
+    hoveredPillTextColor="#f8fafc"
     pillTextColor="#0b1220"
     initialLoadAnimation={true}
    />
   </div>
  </div>
- <header className="relative overflow-hidden text-center px-4 pt-20 pb-12 space-y-5">
+ <header className="relative overflow-hidden text-center px-4 pt-16 pb-12 space-y-5">
   <motion.div initial={{opacity:0,scale:0.8}} animate={{opacity:1,scale:1}} transition={{duration:1}} className="absolute inset-x-0 top-0 -z-10 flex justify-center pointer-events-none">
    <div className="w-72 h-72 rounded-full bg-cyan-500/20 blur-3xl"/>
    <div className="w-72 h-72 rounded-full bg-fuchsia-500/15 blur-3xl -ml-12"/>
   </motion.div>
+
+  <motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:0.7,delay:0.1}} className="top-identity-row mx-auto max-w-6xl">
+   <div className="identity-image placeholder-image placeholder-image-left" aria-label="College logo placeholder" />
+   <div className="identity-text-wrap">
+    <p className="identity-college-name">Basaveshwar Engineering College, Bagalkote-587114</p>
+    <p className="identity-department-name">Electronics and Computer Engineering</p>
+   </div>
+   <div className="identity-image placeholder-image placeholder-image-right" aria-label="Department logo placeholder" />
+  </motion.div>
+
   <motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:0.7,delay:0.2}} className="flex justify-center">
    <FoldText
     text="TERR-ROBO"
